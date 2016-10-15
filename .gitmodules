@@ -1,0 +1,6 @@
+[submodule "web"]
+	path = web
+	url = https://github.com/jsonmc/jsonmc.github.io.git
+[submodule "json"]
+	path = json
+	url = https://github.com/jsonmc/jsonmc.git
