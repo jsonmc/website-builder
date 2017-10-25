@@ -1,16 +1,18 @@
 {
   "dependencies": {
+    "async": "^2.5.0",
     "metalsmith": "^2.3.0",
     "moment": "^2.15.1",
-    "pug": "^2.0.0-beta6"
+    "pug": "^2.0.0-rc.4"
   },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-env": "^2.4.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2017": "^6.24.1"
   },
   "scripts": {
-    "build": "babel-node --presets env -- src/index.js"
+    "build": "babel-node --presets env --plugins transform-object-rest-spread -- src/index.js"
   }
 }
