@@ -6,6 +6,6 @@ html(lang="en")
     h1 JsonMC
       div The JSON Movie Collection project
     h2 Movies
-      each m in movie
-        div
-          a(href=m.url)= m.name + '(' + m.year + ')'
+    each m in movie
+      div
+        a(href=m.url)= m.name + '(' + m.year + ')'

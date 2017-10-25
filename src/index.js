@@ -1,6 +1,7 @@
 import metalsmith from 'metalsmith';
 import path from 'path';
 
+import filter from './filter';
 import parse from './parse';
 import categories from './categories';
 import layout from './layout';
@@ -16,6 +17,7 @@ metalsmith(__dirname)
   .source(jsonSource)
   .destination(webOutput)
   .clean(true)
+  .use(filter())
   .use(parse())
   .use(categories())
   // TODO: A plugin to organize years
