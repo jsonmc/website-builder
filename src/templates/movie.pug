@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+  head
+    title= "JsonMC: " + movie.name
+  body
+    h1 JsonMC
+    h2= movie.name + ' (' + movie.year + ')'
+    div= movie.storyline
+    h3 Actors
+      each actor in movie.actors
+        div= actor
+
+    #footer This page is part of the JSON movie collection project.

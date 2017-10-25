@@ -1,37 +1,92 @@
-const parseActorContents = file => {
-  return file;
+// Renders our json into html files by using pug
+
+import path from 'path';
+import fs from 'fs';
+import async from 'async';
+import pug from 'pug';
+
+const pugLoader = (fileName, metadata) => {
+  return new Promise((accept, reject) => {
+    fs.readFile(path.join(__dirname, 'templates', fileName), 'utf8', (err, pugContents) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      accept(pug.compile(pugContents));
+    });
+  });
 };
 
-const parseMovieContents = file => {
-  return file;
-};
+const getFrontPageCompiler = metadata => pugLoader('frontpage.pug', metadata);
+const getMovieCompiler = metadata => pugLoader('movie.pug', metadata);
 
 const layout = options => {
   return (files, metalsmith, done) => {
     const allFiles = Object.keys(files);
+    const metadata = metalsmith.metadata();
 
-    allFiles.forEach(fileName => {
-      const file = files[fileName];
+    let frontpageCompiler = null;
+    let movieCompiler = null;
 
-      switch (file.layout) {
-        case 'movie': {
-          delete files[fileName];
-          const newFileName = fileName.replace('.json', '/index.html');
-          files[newFileName] = parseMovieContents(file);
-        };
+    async.series([
+      callback => {
+        getMovieCompiler(options)
+          .then(compiler => {
+            movieCompiler = compiler;
+            callback();
+          });
+      },
+      callback => {
+        getFrontPageCompiler(options)
+          .then(compiler => {
+            frontpageCompiler = compiler;
+            callback();
+          });
+      },
+      callback => {
+        async.each(
+          allFiles,
+          (fileName, subcb) => {
+            const file = files[fileName];
+            let newFileName = fileName.replace('.json', '/index.html');
 
-        case 'actor': {
-          delete files[fileName];
-          const newFileName = fileName.replace('.json', '/index.html');
-          files[newFileName] = parseActorContents(file);
-        };
+            switch (file.layout) {
+              case 'frontpage': 
+                //console.log(metadata);
+                file.contents = frontpageCompiler(metadata);
+                break;
 
-        default:
-          break;
-      };
-    })
+              case 'movie':
+                file.contents = movieCompiler({
+                  ...metadata,
+                  movie: file
+                });
+                break;
 
-    done();
+              case 'actor':
+                break;
+
+              default:
+                newFileName = fileName;
+                break;
+            };
+
+            if (fileName !== newFileName) {
+              delete files[fileName];
+              files[newFileName] = file;              
+            }
+
+            subcb();
+          },
+          callback
+        );
+      },
+      callback => {
+        done();
+        callback();
+      }
+    ]);
   };
 };
 
