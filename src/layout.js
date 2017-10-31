@@ -5,15 +5,21 @@ import fs from 'fs';
 import async from 'async';
 import pug from 'pug';
 
+const pugRoot = path.join(__dirname, 'templates');
+
 const pugLoader = (fileName, metadata) => {
   return new Promise((accept, reject) => {
-    fs.readFile(path.join(__dirname, 'templates', fileName), 'utf8', (err, pugContents) => {
+    const fullPath = path.join(pugRoot, fileName);
+    fs.readFile(fullPath, 'utf8', (err, pugContents) => {
       if (err) {
         reject(err);
         return;
       }
 
-      accept(pug.compile(pugContents));
+      accept(pug.compile(pugContents, {
+        filename: fullPath,
+        basedir: pugRoot,
+      }));
     });
   });
 };

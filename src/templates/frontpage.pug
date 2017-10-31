@@ -1,11 +1,7 @@
-doctype html
-html(lang="en")
-  head
-    title JsonMC
-  body
-    h1 JsonMC
-      div The JSON Movie Collection project
-    h2 Movies
-    each m in movie
-      div
-        a(href=m.url)= m.name + '(' + m.year + ')'
+extends layout.pug
+
+block content
+  h2 Movies
+  each m in movie
+    div
+      a(href=m.url)= m.name + '(' + m.year + ')'
