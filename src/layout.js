@@ -31,7 +31,12 @@ const getActorCompiler = metadata => pugLoader('actor.pug', metadata);
 const buildActorUrl = actorName => '/actors/' + actorName
   .replace(/  /g, ' ')
   .replace(/ /g, '-')
+  .replace(/ö/g, 'o')
+  .replace(/é/g, 'e')
+  .replace(/[\.\:,]/g, '')
   .toLowerCase() + '/';
+
+const buildActorFilename = actorName => (buildActorUrl(actorName) + 'index.html').replace(/^\//, '');
 
 const layout = options => {
   return (files, metalsmith, done) => {
@@ -108,6 +113,23 @@ const layout = options => {
           },
           callback
         );
+      },
+      callback => {
+        // Add pages for missing actors
+        const allActors = Object.keys(metadata.actorToMovies);
+        const allFiles = Object.keys(files);
+
+        allActors.forEach(actorName => {
+          const actorFileName = buildActorFilename(actorName);
+
+          if (allFiles.indexOf(actorFileName) < 0) {
+            files[actorFileName] = {
+              contents: 'We don\'t have a page for <strong>' + actorName + '</strong>. Head out to our project site and create one!',
+            };
+          }
+        });
+
+        callback();
       },
       callback => {
         done();
