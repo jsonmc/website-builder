@@ -6,8 +6,24 @@ html(lang="en")
     link(rel='stylesheet', href='/style.css')
   body
     block header
-      h1 JsonMC
-        div The JSON Movie Collection project
-    block content
+      #header
+        .content
+          h1
+            a(href='/') JsonMC
+          div The JSON Movie Collection project
+          .links
+            ul
+              li
+                a(href='https://github.com/jsonmc/jsonmc/blob/master/readme.markdown') About
+              li
+                a(href='https://github.com/jsonmc') GitHub
+
+    #content
+      .content
+        block content
+
     block foot
-      #footer JsonMC project. Find, fork and edit us on git at [github.com/jsonmc/jsonmc](https://github.com/jsonmc/jsonmc)
+      #footer
+        .content
+          | JsonMC project. Find, fork and edit us on git at&nbsp;
+          a(href='https://github.com/jsonmc/jsonmc') github.com/jsonmc/jsonmc
