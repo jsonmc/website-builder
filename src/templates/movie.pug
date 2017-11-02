@@ -4,8 +4,11 @@ block title
   title= "JsonMC: " + movie.name
 block content
   body
-    h2= movie.name + ' (' + movie.year + ')'
-    div= movie.storyline
+    h2#movie-name= movie.name + ' (' + movie.year + ')'
+    .storyline= movie.storyline
     h3 Actors
-      each actor in movie.actors
-        div= actor
+    .actor-list
+      ul
+        each actor in movie.actors
+          li
+            a(href=buildActorUrl(actor))= actor

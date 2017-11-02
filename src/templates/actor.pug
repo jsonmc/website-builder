@@ -4,4 +4,9 @@ block title
   title= "JsonMC: " + actor.name
 block content
   body
-    h2= actor.name
+    h2#actor-name= actor.name
+    h3 Movies
+    .movie-list
+      each movie in actorMovies
+        div
+          a(href=movie.url)= movie.name + ' (' + movie.year + ')'

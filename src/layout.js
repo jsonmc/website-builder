@@ -28,6 +28,11 @@ const getFrontPageCompiler = metadata => pugLoader('frontpage.pug', metadata);
 const getMovieCompiler = metadata => pugLoader('movie.pug', metadata);
 const getActorCompiler = metadata => pugLoader('actor.pug', metadata);
 
+const buildActorUrl = actorName => '/actors/' + actorName
+  .replace(/  /g, ' ')
+  .replace(/ /g, '-')
+  .toLowerCase() + '/';
+
 const layout = options => {
   return (files, metalsmith, done) => {
     const allFiles = Object.keys(files);
@@ -75,14 +80,17 @@ const layout = options => {
               case 'movie':
                 file.contents = movieCompiler({
                   ...metadata,
-                  movie: file
+                  buildActorUrl,
+                  movie: file,
                 });
                 break;
 
               case 'actor':
                 file.contents = actorCompiler({
                   ...metadata,
-                  actor: file
+                  buildActorUrl,
+                  actor: file,
+                  actorMovies: metadata.actorToMovies[file.name] || [],
                 });
                 break;
 

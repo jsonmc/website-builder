@@ -7,6 +7,7 @@ const parse = options => {
     const metadata = metalsmith.metadata();
     metadata.movie = [];
     metadata.actor = [];
+    metadata.actorToMovies = {};
 
     // TODO: delete test files
 
@@ -28,6 +29,16 @@ const parse = options => {
           Object.keys(data).forEach(
             dataKey => file[dataKey] = data[dataKey]
           );
+
+          if (file.layout === 'movie') {
+            file.actors.forEach(actorName => {
+              if (!metadata.actorToMovies[actorName]) {
+                metadata.actorToMovies[actorName] = [ file ];
+              } else {
+                metadata.actorToMovies[actorName].push(file);
+              }
+            })
+          }
 
           if (file.layout === 'movie' || file.layout === 'actor') {
             metadata[file.layout].push(file);
