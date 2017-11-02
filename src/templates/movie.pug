@@ -5,6 +5,13 @@ block title
 block content
   h2#movie-name= movie.name + ' (' + movie.year + ')'
   .storyline= movie.storyline
+  dl.movie-data
+    dt Release Date
+    dd= movie['release-date']
+    dt Runtime
+    dd= movie.runtime
+    dt Writer
+    dd= movie.writer.join(', ')
   h3 Actors
   .actor-list
     ul

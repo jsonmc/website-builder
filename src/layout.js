@@ -95,7 +95,10 @@ const layout = options => {
                 file.contents = movieCompiler({
                   ...metadata,
                   buildActorUrl,
-                  movie: file,
+                  movie: {
+                    ...file,
+                    writer: (typeof file.writer === 'string') ? [file.writer] : file.writer,
+                  },
                 });
                 break;
 
