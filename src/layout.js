@@ -26,6 +26,7 @@ const pugLoader = (fileName, metadata) => {
 
 const getFrontPageCompiler = metadata => pugLoader('frontpage.pug', metadata);
 const getMovieCompiler = metadata => pugLoader('movie.pug', metadata);
+const getActorCompiler = metadata => pugLoader('actor.pug', metadata);
 
 const layout = options => {
   return (files, metalsmith, done) => {
@@ -34,6 +35,7 @@ const layout = options => {
 
     let frontpageCompiler = null;
     let movieCompiler = null;
+    let actorCompiler = null;
 
     async.series([
       callback => {
@@ -47,6 +49,13 @@ const layout = options => {
         getFrontPageCompiler(options)
           .then(compiler => {
             frontpageCompiler = compiler;
+            callback();
+          });
+      },
+      callback => {
+        getActorCompiler(options)
+          .then(compiler => {
+            actorCompiler = compiler;
             callback();
           });
       },
@@ -71,6 +80,10 @@ const layout = options => {
                 break;
 
               case 'actor':
+                file.contents = actorCompiler({
+                  ...metadata,
+                  actor: file
+                });
                 break;
 
               default:
