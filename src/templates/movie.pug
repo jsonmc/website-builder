@@ -3,12 +3,11 @@ extends layout.pug
 block title
   title= "JsonMC: " + movie.name
 block content
-  body
-    h2#movie-name= movie.name + ' (' + movie.year + ')'
-    .storyline= movie.storyline
-    h3 Actors
-    .actor-list
-      ul
-        each actor in movie.actors
-          li
-            a(href=buildActorUrl(actor))= actor
+  h2#movie-name= movie.name + ' (' + movie.year + ')'
+  .storyline= movie.storyline
+  h3 Actors
+  .actor-list
+    ul
+      each actor in movie.actors
+        li
+          a(href=buildActorUrl(actor))= actor

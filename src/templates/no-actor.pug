@@ -1,0 +1,10 @@
+extends layout.pug
+
+block title
+  title= "JsonMC: " + actorName
+block content
+  h2#actor-name= actorName
+  .no-actor
+    | We don't have a page for&nbsp;
+    strong= actorName
+    |. Head out to our project site and create one!

@@ -27,6 +27,7 @@ const pugLoader = (fileName, metadata) => {
 const getFrontPageCompiler = metadata => pugLoader('frontpage.pug', metadata);
 const getMovieCompiler = metadata => pugLoader('movie.pug', metadata);
 const getActorCompiler = metadata => pugLoader('actor.pug', metadata);
+const getNoActorCompiler = metadata => pugLoader('no-actor.pug', metadata);
 
 const buildActorUrl = actorName => '/actors/' + actorName
   .replace(/  /g, ' ')
@@ -46,6 +47,7 @@ const layout = options => {
     let frontpageCompiler = null;
     let movieCompiler = null;
     let actorCompiler = null;
+    let noActorCompiler = null;
 
     async.series([
       callback => {
@@ -66,6 +68,13 @@ const layout = options => {
         getActorCompiler(options)
           .then(compiler => {
             actorCompiler = compiler;
+            callback();
+          });
+      },
+      callback => {
+        getNoActorCompiler(options)
+          .then(compiler => {
+            noActorCompiler = compiler;
             callback();
           });
       },
@@ -124,7 +133,7 @@ const layout = options => {
 
           if (allFiles.indexOf(actorFileName) < 0) {
             files[actorFileName] = {
-              contents: 'We don\'t have a page for <strong>' + actorName + '</strong>. Head out to our project site and create one!',
+              contents: noActorCompiler({ actorName }),
             };
           }
         });
