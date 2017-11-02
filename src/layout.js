@@ -99,6 +99,7 @@ const layout = options => {
                     ...file,
                     writer: (typeof file.writer === 'string') ? [file.writer] : file.writer,
                   },
+                  filename: fileName,
                 });
                 break;
 
